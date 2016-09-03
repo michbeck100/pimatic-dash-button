@@ -36,7 +36,7 @@ module.exports = (env) =>
           if packet.payload.ethertype == 2054 #ensures it is an arp packet
             # List of registered Mac addresses with IEEE as of 18 July 2016 for Amazon Technologies Inc.
             # source: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries
-            amazon_macs = {"747548","F0D2F1","8871E5","74C246","F0272D","0C47C9","A002DC","AC63BE","44650D","50F5DA","84D6D0"}
+            amazon_macs = ["747548","F0D2F1","8871E5","74C246","F0272D","0C47C9","A002DC","AC63BE","44650D","50F5DA","84D6D0"]
             possible_dash = helper.int_array_to_hex(packet.payload.payload.sender_ha.addr) #getting the hardware address of the possible dash
             env.logger.debug 'detected possible dash button with mac address ' + possible_dash
             # filter for amazon mac addresses
