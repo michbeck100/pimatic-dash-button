@@ -5,6 +5,7 @@
   "main": "dash-button.coffee",
   "files": [
     "dash-button.coffee",
+    "helper.coffee",
     "README.md",
     "dash-button-config-schema.coffee",
     "device-config-schema.coffee",
