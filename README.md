@@ -26,6 +26,10 @@ To install the plugin just add the plugin to the config.json of pimatic:
 
 This will fetch the most recent version from npm-registry on the next pimatic start and install the plugin.
 
+###### Dash Button installation
+
+Follow the instructions in the Amazon app to configure your button, to connect to your wifi but **don't select a product in the last step. Just exit the app**.  Optionally disable the internet access for your dash button in your router configuration, otherwise the Amazon app might complain the incomplete setup of your dash button, every time you press it.
+
 #### Configuration
 
 pimatic-dash-button supports the device discovery feature of pimatic (as of version 0.9.x). To create a new dash button device, just click on "Discover devices" in the Devices section of pimatic.
@@ -44,6 +48,15 @@ To manually add a dash button to your configuration just add it to the devices s
 ]
 ```
 
+If you have multiple network interfaces on your hardware and pimatic has issues finding your dash button, then configure the plugin to explicitly to use a defined interface.
+
+```json
+{
+  "plugin": "dash-button",
+  "interface": "eth0"   
+}
+```
+
 ### Sponsoring
 
 Do you like this plugin? Then consider a donation to support development.
@@ -55,6 +68,9 @@ Do you like this plugin? Then consider a donation to support development.
 
 0.0.1
 * initial release
+
+0.0.2
+* bugfix for mac address filtering
 
 ### Credit
 Most of the dash button discovery code was inspired by [node-dash-button](https://github.com/hortinstein/node-dash-button) and [node-pcap](https://github.com/mranney/node_pcap).
