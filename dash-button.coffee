@@ -11,8 +11,8 @@ module.exports = (env) =>
   class DashButtonPlugin extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
-
-      pcapSession = pcap.createSession(@config.interface, 'arp')
+      # using a buffer size of 1 MB, should be enough for filtering ARP requests
+      pcapSession = pcap.createSession(@config.interface, 'arp', 1024 * 1024)
 
       deviceConfigDef = require('./device-config-schema.coffee')
 
