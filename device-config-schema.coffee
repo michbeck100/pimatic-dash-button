@@ -9,7 +9,15 @@ module.exports = {
         description: "MAC address of dash button"
         type: "string"
       buttons:
-  	    description: "Button will be created automatically"
-  		  type: "array"
-  			default: []
+        description: "Button will be created automatically"
+        type: "array"
+        default: []
+        format: "table"
+        items:
+          type: "object"
+          properties:
+            id:
+              type: "string"
+            text:
+              type: "string"
 }

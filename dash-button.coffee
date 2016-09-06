@@ -16,10 +16,6 @@ module.exports = (env) =>
 
       deviceConfigDef = require('./device-config-schema.coffee')
 
-      @framework.ruleManager.addPredicateProvider(
-        new DashButtonPredicateProvider(@framework, @config)
-      )
-
       @framework.deviceManager.registerDeviceClass 'DashButtonDevice',
         configDef: deviceConfigDef.DashButtonDevice
         createCallback: (config, lastState) =>
@@ -94,66 +90,5 @@ module.exports = (env) =>
     destroy: () ->
       super()
       @pcapSession.removeListener('packet', @_listener)
-
-  # copied from ButtonPredicateProvider
-  class DashButtonPredicateProvider extends env.predicates.PredicateProvider
-
-    presets: [
-        {
-          name: "Dash Button pressed"
-          input: "{device} is pressed"
-        }
-      ]
-
-    constructor: (@framework) ->
-
-    parsePredicate: (input, context) ->
-
-      dashButtons = _(@framework.deviceManager.devices).values()
-        .filter((device) => device.template is 'dashbutton').value()
-
-      device = null
-      match = null
-
-      env.logger.debug 'input is ' + input
-
-
-      M(input, context)
-        .matchDevice(dashButtons, (next, d) =>
-          next.match(' is pressed', type: 'static', (next) =>
-            device = d
-            match = next.getFullMatch()
-          )
-        )
-
-      if match?
-        assert device?
-        return {
-          token: match
-          nextInput: input.substring(match.length)
-          predicateHandler: new DashButtonPredicateHandler(this, device)
-        }
-      return null
-
-  class DashButtonPredicateHandler extends env.predicates.PredicateHandler
-
-    constructor: (@provider, @device) ->
-      assert @device? and @device instanceof DashButtonDevice
-      @dependOnDevice(@device)
-
-    setup: ->
-      @buttonPressedListener = () =>
-        @emit 'change', 'event'
-
-      @device.on 'dashButton', @buttonPressedListener
-      super()
-
-    getValue: -> Promise.resolve(false)
-    destroy: ->
-      @device.removeListener 'dashButton', @buttonPressedListener
-      super()
-    getType: -> 'event'
-
-
 
   return new DashButtonPlugin()
