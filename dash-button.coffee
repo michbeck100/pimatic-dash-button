@@ -11,8 +11,17 @@ module.exports = (env) =>
   class DashButtonPlugin extends env.plugins.Plugin
 
     init: (app, @framework, @config) =>
+      # List of registered Mac addresses with IEEE
+      # as of 18 July 2016 for Amazon Technologies Inc.
+      # source: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries
+      amazon_macs = ["747548","F0D2F1","8871E5","74C246","F0272D","0C47C9"
+        ,"A002DC","AC63BE","44650D","50F5DA","84D6D0"]
+      amazon_macs = amazon_macs
+        .map((mac) -> "(ether[6:2] == 0x" + mac.substr(0, 4) + " and ether[8:1] == 0x" + mac.substr(4, 2) + ")")
+        .reduce((l, r) -> l + " or " + r)
+      # filtering arp requests only and for mac addresses directly in libpcap on kernel level
       # using a buffer size of 1 MB, should be enough for filtering ARP requests
-      pcapSession = pcap.createSession(@config.interface, 'arp', 1024 * 1024)
+      pcapSession = pcap.createSession(@config.interface, 'arp and (' + amazon_macs + ')', 1024 * 1024)
 
       deviceConfigDef = require('./device-config-schema.coffee')
 
@@ -32,29 +41,21 @@ module.exports = (env) =>
         packetListener = (raw_packet) =>
           packet = pcap.decode.packet(raw_packet) #decodes the packet
           if packet.payload.ethertype == 2054 #ensures it is an arp packet
-            # List of registered Mac addresses with IEEE
-            # as of 18 July 2016 for Amazon Technologies Inc.
-            # source: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries
-            amazon_macs = ["747548","F0D2F1","8871E5","74C246","F0272D","0C47C9"
-              ,"A002DC","AC63BE","44650D","50F5DA","84D6D0"]
             #getting the hardware address of the possible dash
-            possible_dash =
+            dash =
               helper.int_array_to_hex(packet.payload.payload.sender_ha.addr)
-            env.logger.debug 'detected possible dash button with mac address ' + possible_dash
-            # filter for amazon mac addresses
-            if possible_dash.slice(0,8).toString().toUpperCase().split(':').join('') in amazon_macs
-              env.logger.debug 'detected new Amazon dash button with mac address ' + possible_dash
-              config = {
-                class: 'DashButtonDevice'
-                address: possible_dash
-              }
-              hash = JSON.stringify(config)
-              if discoveredButtons[hash]
-                return
-              discoveredButtons[hash] = true
-              @framework.deviceManager.discoveredDevice(
-                'pimatic-dash-button', 'Dash Button (' + possible_dash + ')', config
-              )
+            env.logger.debug 'detected new Amazon dash button with mac address ' + dash
+            config = {
+              class: 'DashButtonDevice'
+              address: dash
+            }
+            hash = JSON.stringify(config)
+            if discoveredButtons[hash]
+              return
+            discoveredButtons[hash] = true
+            @framework.deviceManager.discoveredDevice(
+              'pimatic-dash-button', 'Dash Button (' + dash + ')', config
+            )
 
         pcapSession.on('packet', packetListener)
 
