@@ -65,12 +65,16 @@ Do you like this plugin? Then consider a donation to support development.
 [![Flattr pimatic-dash-button](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=michbeck100&url=https://github.com/michbeck100/pimatic-dash-button&title=pimatic-dash-button&language=&tags=github&category=software)
 
 ### Changelog
-
-0.0.1
-* initial release
+0.1.0
+* [#2](https://github.com/michbeck100/pimatic-dash-button/issues/2) Dash button device acts like a ButtonsDevice now, fixes issues with pimatic-mobile-frontend. Device can now be used in UI, too.
+* [#3](https://github.com/michbeck100/pimatic-dash-button/issues/3) Decreased buffer size of pcap to 1 MB
+* [#4](https://github.com/michbeck100/pimatic-dash-button/issues/4) Filtering for mac addresses directly in libpcap on kernel level
 
 0.0.2
 * bugfix for mac address filtering
+
+0.0.1
+* initial release
 
 ### Credit
 Most of the dash button discovery code was inspired by [node-dash-button](https://github.com/hortinstein/node-dash-button) and [node-pcap](https://github.com/mranney/node_pcap).
