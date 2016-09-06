@@ -5,8 +5,8 @@ module.exports = {
     type: "object"
     extensions: ["xLink"]
     properties: {
-        address:
-          description: "MAC address of dash button"
-          type: "string"
+      address:
+        description: "MAC address of dash button"
+        type: "string"
     }
 }
