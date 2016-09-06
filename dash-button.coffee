@@ -17,11 +17,13 @@ module.exports = (env) =>
       amazon_macs = ["747548","F0D2F1","8871E5","74C246","F0272D","0C47C9"
         ,"A002DC","AC63BE","44650D","50F5DA","84D6D0"]
       amazon_macs = amazon_macs
-        .map((mac) -> "(ether[6:2] == 0x" + mac.substr(0, 4) + " and ether[8:1] == 0x" + mac.substr(4, 2) + ")")
+        .map((mac) ->
+          "(ether[6:2] == 0x" + mac.substr(0, 4) + " and ether[8:1] == 0x" + mac.substr(4, 2) + ")")
         .reduce((l, r) -> l + " or " + r)
       # filtering arp requests only and for mac addresses directly in libpcap on kernel level
       # using a buffer size of 1 MB, should be enough for filtering ARP requests
-      pcapSession = pcap.createSession(@config.interface, 'arp and (' + amazon_macs + ')', 1024 * 1024)
+      pcapSession =
+        pcap.createSession(@config.interface, 'arp and (' + amazon_macs + ')', 1024 * 1024)
 
       deviceConfigDef = require('./device-config-schema.coffee')
 
