@@ -66,33 +66,29 @@ module.exports = (env) =>
           pcapSession.removeListener("packet", packetListener)
         ), eventData.time)
 
-  class DashButtonDevice extends env.devices.Device
+  class DashButtonDevice extends env.devices.ButtonsDevice
 
     _listener: null
-
-    actions:
-      pressed:
-        description: "dash button was pressed"
-
-    template: "dashbutton"
 
     constructor: (@config, @pcapSession) ->
       @id = @config.id
       @name = @config.name
-      super()
+      @config.buttons = [{"id": @id, "text": "Press"}]
+      super(@config)
 
       @_listener = (raw_packet) =>
         packet = pcap.decode.packet(raw_packet) #decodes the packet
         if packet.payload.ethertype == 2054 #ensures it is an arp packet
           address = helper.int_array_to_hex(packet.payload.payload.sender_ha.addr)
           if address == @config.address
-            @pressed()
+            @buttonPressed()
 
       @pcapSession.on 'packet', @_listener
 
-    pressed: ->
+    buttonPressed: ->
       env.logger.debug @id + ' was pressed'
-      @emit 'dashButton'
+      @_lastPressedButton = @id
+      @emit 'button', @id
       return Promise.resolve()
 
     destroy: () ->

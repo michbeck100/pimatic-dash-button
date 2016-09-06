@@ -4,9 +4,12 @@ module.exports = {
     title: "DashButton config"
     type: "object"
     extensions: ["xLink"]
-    properties: {
+    properties:
       address:
         description: "MAC address of dash button"
         type: "string"
-    }
+      buttons:
+  	    description: "Button will be created automatically"
+  		  type: "array"
+  			default: []
 }
