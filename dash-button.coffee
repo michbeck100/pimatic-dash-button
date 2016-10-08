@@ -15,7 +15,7 @@ module.exports = (env) =>
       # as of 18 July 2016 for Amazon Technologies Inc.
       # source: https://regauth.standards.ieee.org/standards-ra-web/pub/view.html#registries
       amazon_macs = ["747548","F0D2F1","8871E5","74C246","F0272D","0C47C9"
-        ,"A002DC","AC63BE","44650D","50F5DA","84D6D0"]
+        ,"A002DC","AC63BE","44650D","50F5DA","84D6D0","34D270"]
       amazon_macs = amazon_macs
         .map((mac) ->
           "(ether[6:2] == 0x" + mac.substr(0, 4) + " and ether[8:1] == 0x" + mac.substr(4, 2) + ")")
