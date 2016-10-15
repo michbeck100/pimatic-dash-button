@@ -28,6 +28,7 @@ module.exports = (env) =>
       deviceConfigDef = require('./device-config-schema.coffee')
 
       @framework.deviceManager.registerDeviceClass 'DashButtonDevice',
+        prepareConfig: DashButtonDevice.prepareConfig
         configDef: deviceConfigDef.DashButtonDevice
         createCallback: (config, lastState) =>
           return new DashButtonDevice(config, pcapSession)
@@ -69,6 +70,9 @@ module.exports = (env) =>
 
     _listener: null
 
+    @prepareConfig: (config) =>
+      config.address = config.address.toLowerCase() if config.address?
+  
     constructor: (@config, @pcapSession) ->
       @id = @config.id
       @name = @config.name
