@@ -71,7 +71,11 @@ module.exports = (env) =>
     _listener: null
 
     @prepareConfig: (config) =>
-      config.address = config.address.toLowerCase() if config.address?
+      address = (config.address || '').replace /\W/g, ''
+      if address.length is 12
+        config.address = address.replace(/(.{2})/g, '$1:').toLowerCase().slice(0, -1)
+      else
+        env.logger.error "Invalid MAC address: #{config.address || 'Property "address" missing'}"
   
     constructor: (@config, @pcapSession) ->
       @id = @config.id
