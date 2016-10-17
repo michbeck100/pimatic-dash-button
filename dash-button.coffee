@@ -28,6 +28,7 @@ module.exports = (env) =>
       deviceConfigDef = require('./device-config-schema.coffee')
 
       @framework.deviceManager.registerDeviceClass 'DashButtonDevice',
+        prepareConfig: DashButtonDevice.prepareConfig
         configDef: deviceConfigDef.DashButtonDevice
         createCallback: (config, lastState) =>
           return new DashButtonDevice(config, pcapSession)
@@ -69,6 +70,13 @@ module.exports = (env) =>
 
     _listener: null
 
+    @prepareConfig: (config) =>
+      address = (config.address || '').replace /\W/g, ''
+      if address.length is 12
+        config.address = address.replace(/(.{2})/g, '$1:').toLowerCase().slice(0, -1)
+      else
+        env.logger.error "Invalid MAC address: #{config.address || 'Property "address" missing'}"
+  
     constructor: (@config, @pcapSession) ->
       @id = @config.id
       @name = @config.name
