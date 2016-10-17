@@ -65,6 +65,10 @@ Do you like this plugin? Then consider a donation to support development.
 [![Flattr pimatic-dash-button](http://api.flattr.com/button/flattr-badge-large.png)](https://flattr.com/submit/auto?user_id=michbeck100&url=https://github.com/michbeck100/pimatic-dash-button&title=pimatic-dash-button&language=&tags=github&category=software)
 
 ### Changelog
+0.2.0
+* [#7](https://github.com/michbeck100/pimatic-dash-button/pull/7) Normalize MAC address
+* [#6](https://github.com/michbeck100/pimatic-dash-button/issues/6) Extend vendor mac ids
+
 0.1.0
 * [#2](https://github.com/michbeck100/pimatic-dash-button/issues/2) Dash button device acts like a ButtonsDevice now, fixes issues with pimatic-mobile-frontend. Device can now be used in UI, too.
 * [#3](https://github.com/michbeck100/pimatic-dash-button/issues/3) Decreased buffer size of pcap to 1 MB
